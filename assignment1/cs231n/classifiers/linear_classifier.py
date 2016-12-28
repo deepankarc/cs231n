@@ -75,7 +75,7 @@ class LinearClassifier(object):
 
     return loss_history
 
-  def predict(self, X):
+  def predict(self, X, c_type=0):
     """
     Use the trained weights of this linear classifier to predict labels for
     data points.
@@ -93,8 +93,14 @@ class LinearClassifier(object):
     # TODO:                                                                   #
     # Implement this method. Store the predicted labels in y_pred.            #
     ###########################################################################
-    # SVM is a max-margin classifier
-    y_pred = np.argmax(np.dot(X,self.W),axis=1)
+    if(c_type == 0):
+        # SVM is a max-margin classifier
+        y_pred = np.argmax(np.dot(X,self.W),axis=1)
+    else:
+        # softmax classifier
+        score = np.exp(np.dot(X,self.W))
+        tot_score = np.sum(score,axis=1,keepdims=True)
+        y_pred = np.argmax(score/tot_score,axis=1)
     ###########################################################################
     #                           END OF YOUR CODE                              #
     ###########################################################################
