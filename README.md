@@ -1,4 +1,4 @@
-# cs231n
+# CS231n
 
 This repository contains my solutions to the assignments of the CS231n course. A big thank you to the faculty of the course at Stanford for making the resource materials available.
 
