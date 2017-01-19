@@ -191,9 +191,8 @@ class FullyConnectedNet(object):
         self.params['W%d' % (l+1)] = np.random.randn(all_dims[l],
                                                 all_dims[l+1])*weight_scale
         self.params['b%d' % (l+1)] = np.zeros(all_dims[l+1])
-
-    
-        if(self.use_batchnorm == True):
+        
+        if(self.use_batchnorm == True and l != self.num_layers-1):
             self.params['gamma%d' % (l+1)] = np.ones(all_dims[l+1])
             self.params['beta%d' % (l+1)] = np.zeros(all_dims[l+1])
                 
@@ -254,6 +253,7 @@ class FullyConnectedNet(object):
     # layer, etc.                                                              #
     ############################################################################
     # scores for every layer = z, activations = a
+    # initialise dictionaries for the layers
     scores = None
     z = {}
     a = {}
@@ -261,6 +261,7 @@ class FullyConnectedNet(object):
     afc_cache = {}
     relu_cache = {}
     bn_cache = {}
+    dpt_cache = {}
     
     # compute forward pass for all hidden layers
     for l in xrange(self.num_layers-1):
@@ -274,12 +275,17 @@ class FullyConnectedNet(object):
         z[l+1], afc_cache[l+1] = affine_forward(a[l],self.params[W_key],
                                                 self.params[b_key])
         
-        # perfrom batch normalisation
-        z[l+1], bn_cache[l+1] = batchnorm_forward(z[l+1], self.params[gamma_key], 
-                                                  self.params[beta_key], self.bn_params[l])
+        # perform batch normalisation
+        if(self.use_batchnorm == True):
+            z[l+1], bn_cache[l+1] = batchnorm_forward(z[l+1], self.params[gamma_key], 
+                                                      self.params[beta_key], self.bn_params[l])
         
         # compute activations
         a[l+1],relu_cache[l+1] = relu_forward(z[l+1])
+        
+        # perform dropout
+        if(self.use_dropout == True):
+            a[l+1], dpt_cache[l+1] = dropout_forward(a[l+1], self.dropout_param)
  
     # compute z_L = final scores
     W_end = 'W%d' % (self.num_layers)
@@ -318,17 +324,31 @@ class FullyConnectedNet(object):
         # dictionary keys
         W_key = 'W%d' % (l)
         b_key = 'b%d' % (l)
+        gamma_key = 'gamma%d' % (l)
+        beta_key = 'beta%d' % (l)
         
         # add regularisation for parameters of every layer to the loss
         loss += 0.5*self.reg*np.sum(self.params[W_key]*self.params[W_key])
         
         # compute gradients wrt weights and bias
         if(l == self.num_layers):
+            # compute output layer grads    
             dx, grads[W_key], grads[b_key] = affine_backward(delta_L,afc_cache[l])
+
         else:
             # compute delta_l; eq.2
             delta_l = relu_backward(dx, relu_cache[l])
-            dx, grads[W_key], grads[b_key] = affine_backward(delta_l,afc_cache[l])
+            
+            # backprop for dropout
+            if(self.use_dropout == True):
+                dx = dropout_backward(delta_l, dpt_cache[l])
+            
+            # backprop for batchnorm 
+            if(self.use_batchnorm == True):
+                dx, grads[gamma_key], grads[beta_key] = batchnorm_backward_alt(delta_l, bn_cache[l])
+                
+            # compute dx = delta[l+1].W[l+1] and grads
+            dx, grads[W_key], grads[b_key] = affine_backward(dx,afc_cache[l])
                         
         # regularisation
         grads[W_key] += self.reg*self.params[W_key]
