@@ -4,3 +4,17 @@ This repository contains my solutions to the assignments of the CS231n course. A
 
 [Lecture Videos](https://www.youtube.com/channel/UCPk8m_r6fkUSYmvgCBwq-sw/videos)  
 [Lecture Notes](http://cs231n.github.io/)
+
+### Assignment - 1 
+* [x] K-Nearest Neighbours
+* [x] Support Vector Machines
+* [x] Softmax
+* [x] Two-Layer Neural Network (TODO: slight changes to calculation on deltas in backprop for softmax layer)
+* [x] Features
+
+### Assignment - 2
+* [x] Fully Connected Nets
+* [x] Batchnormalisation
+* [x] Dropout
+* [ ] Convolutional Neural Network (TODO: Improve classification accuracy on CIFAR-10 above 65%)
+* [ ] Additional Experiments
