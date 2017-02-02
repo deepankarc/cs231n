@@ -318,8 +318,7 @@ class FullyConnectedNet(object):
     ############################################################################
     # compute loss and delta_L; eq.1
     loss, delta_L = softmax_loss(scores,y)
-    delta[self.num_layers] = delta_L
-    #Tracer()()
+
     for l in xrange(self.num_layers,0,-1):
         # dictionary keys
         W_key = 'W%d' % (l)
