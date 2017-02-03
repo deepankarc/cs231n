@@ -16,5 +16,6 @@ This repository contains my solutions to the assignments of the CS231n course. A
 * [x] Fully Connected Nets
 * [x] Batchnormalisation
 * [x] Dropout
-* [ ] Convolutional Neural Network (TODO: Improve classification accuracy on CIFAR-10 above 65%)
-* [ ] Additional Experiments
+* [x] Convolutional Neural Network ~~(TODO: Improve classification accuracy on CIFAR-10 above 65%)~~
+* [ ] Implement parametric ReLU
+* [ ] Different ConvNet Architectures (particularly: [conv - relu - conv - relu - pool]xM - [affine]xN - [softmax])
