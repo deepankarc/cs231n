@@ -120,6 +120,62 @@ def relu_backward(dout, cache):
   return dx
 
 
+def prelu_forward(x, c):
+  """
+  Computes the forward pass for a layer of parametric rectified linear units (PReLUs).
+
+  Input:
+  - x: Inputs, of any shape
+  - c: PReLU parameter
+
+  Returns a tuple of:
+  - out: Output, of the same shape as x
+  - cache: x
+  """
+  out = None
+  #############################################################################
+  # TODO: Implement the ReLU forward pass.                                    #
+  #############################################################################
+  out = np.maximum(0,x) + c*np.minimum(0,x)
+  #############################################################################
+  #                             END OF YOUR CODE                              #
+  #############################################################################
+  cache = (x, c)
+  return out, cache
+
+
+def prelu_backward(dout, cache):
+  """
+  Computes the backward pass for a layer of parametric rectified linear units (PReLUs).
+
+  Input:
+  - dout: Upstream derivatives, of any shape
+  - cache: Input x, of same shape as dout
+
+  Returns:
+  - dx: Gradient with respect to x
+  - dc: Gradient with respect to the parameter c
+  """
+  dx = None
+  x, c = cache
+  #############################################################################
+  # TODO: Implement the ReLU backward pass.                                   #
+  #############################################################################
+  # eq.2: incorporates derivative of activation function
+  dx_1 = np.ma.masked_where(x <= 0, dout, copy=True)
+  dx_2 = np.ma.masked_where(x >= 0, c*dout, copy=True)
+  dx = np.ma.filled(dx_1,0) + np.ma.filled(dx_2,0)
+    
+  # compute derivative wrt parameter c
+  dc = dout
+  dc[x>=0] = 0
+  dc = np.sum(dc*x)
+  #############################################################################
+  #                             END OF YOUR CODE                              #
+  #############################################################################
+  return dx, dc
+
+
 def batchnorm_forward(x, gamma, beta, bn_param):
   """
   Forward pass for batch normalization.
