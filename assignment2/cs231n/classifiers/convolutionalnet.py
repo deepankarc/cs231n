@@ -57,6 +57,10 @@ class ConvolutionalNet(object):
             if(l % 2 == 1 and l != 0):
                 H2,W2 = [(H2+2*pad-F)//pool_S + 1, (W2+2*pad-F)//pool_S + 1]
             if(self.use_bn is True):
+                # initialise gamma and beta
+                self.params['gamma%d' % (l+1)] = np.ones(C)
+                self.params['beta%d' % (l+1)] = np.zeros(C)
+                # initialise the running means and variances for spatial batchnorm
                 self.spatialbn_params['running_mean'] = np.zeros(num_filters)
                 self.spatialbn_params['running_var'] = np.zeros(num_filters)
       
@@ -70,6 +74,10 @@ class ConvolutionalNet(object):
             self.params['W%d' % (l+2*conv_layers+1)] = np.random.randn(hidden_dims[l],hidden_dims[l+1]) * weight_scale
             self.params['b%d' % (l+2*conv_layers+1)] = np.zeros(hidden_dims[l+1])
             if(self.use_bn is True and l != affine_layers):
+                # initial gamma and beta
+                self.params['gamma%d' % (l+2*conv_layers+1)] = np.ones(hidden_dims[l])
+                self.params['beta%d' % (l+2*conv_layers+1)] = np.zeros(hidden_dims[l])
+                # initialise the running means and variances for spatial batchnorm
                 self.bn_params['running_mean'] = np.zeros(hidden_dims[l+1])
                 self.bn_params['running_var'] = np.zeros(hidden_dims[l+1])
 
@@ -133,10 +141,10 @@ class ConvolutionalNet(object):
         
         loss, grads = 0, {}
         
-        # perform backprop
-        #Tracer()()
+        # calculate loss and final layer delta_L
         loss, delta_l = softmax_loss(scores,y)
         
+        # perform backpropagation
         for l in xrange(total_layers-1,-1,-1):
             # perform backprop for affine layers
             if(l >= conv_layers):                
@@ -160,6 +168,7 @@ class ConvolutionalNet(object):
                 grads['W%d' % (2*l+2)] += self.reg*W2
             else:
                 W = self.params['W%d' % (2*conv_layers+l-1)]
+                
                 loss += 0.5*self.reg*np.sum(W*W)
                 grads['W%d' % (2*conv_layers+l-1)] += self.reg*W
             
