@@ -18,4 +18,5 @@ This repository contains my solutions to the assignments of the CS231n course. A
 * [x] Dropout
 * [x] Convolutional Neural Network ~~(TODO: Improve classification accuracy on CIFAR-10 above 65%)~~
 * [x] Implement parametric ReLU
+* [x] Analyse effect of Adam vs Adam+LR decay
 * [ ] Different ConvNet Architectures (particularly: `[conv - relu - conv - relu - pool]xM - [affine]xN - [softmax]` -- both with and without batchnorm)
