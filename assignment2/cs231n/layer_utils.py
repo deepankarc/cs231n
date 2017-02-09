@@ -73,8 +73,9 @@ def affine_batchnorm_forward(x, w, b, gamma, beta, bn_param):
   - out: Output from the ReLU
   - cache: Object to give to the backward pass
   """    
+  #Tracer()()
   a, fc_cache = affine_forward(x, w, b)
-  out, bn_cache = batchnorm_forward(a)
+  out, bn_cache = batchnorm_forward(a, gamma, beta, bn_param)
   cache = (fc_cache, bn_cache)
   return out, cache
 
@@ -247,7 +248,7 @@ def conv_spatialbn_relu_backward(dout, cache):
 
 
 # conv - spatial batchnorm - ReLU - pool forward/backward pass
-def conv_spatialbn_relu_pool_forward(x,w,b,gamma,beta,conv_param,sbn_param,pool_param):
+def conv_spatialbn_relu_pool_forward(x, w,b , gamma, beta, conv_param, sbn_param, pool_param):
   """
   A convenience layer that performs a convolution and spatial batchnormalisation 
   followed by a ReLU and max-pooling.
@@ -263,7 +264,7 @@ def conv_spatialbn_relu_pool_forward(x,w,b,gamma,beta,conv_param,sbn_param,pool_
   """
   a, conv_cache = conv_forward_fast(x, w, b, conv_param)
   a, sbn_cache = spatial_batchnorm_forward(a, gamma, beta, sbn_param)
-  a, relu_cache = relu_forward(a)
+  s, relu_cache = relu_forward(a)
   out, pool_cache = max_pool_forward_fast(s, pool_param)
   cache = (conv_cache, sbn_cache, relu_cache, pool_cache)
   return out, cache  
@@ -283,7 +284,7 @@ def conv_spatialbn_relu_pool_backward(dout, cache):
 
 # ----------------- utility layers for debugging ----------------- #
 # ----------------- ---------------------------- ----------------- #
-def conv_relu_pool_forward_test(x, w, b, conv_param, pool_param):
+def conv_spatialbn_relu_pool_forward_test(x, w,b , gamma, beta, conv_param, sbn_param, pool_param):
   """
   Convenience layer that performs a convolution, a ReLU, and a pool.
 
@@ -296,8 +297,10 @@ def conv_relu_pool_forward_test(x, w, b, conv_param, pool_param):
   - out: Output from the pooling layer
   - cache: Object to give to the backward pass
   """
+  #Tracer()()
   a, conv_cache = conv_forward_naive(x, w, b, conv_param)
-  s, relu_cache = relu_forward(a)
-  out, pool_cache = max_pool_forward_naive(s, pool_param)
-  cache = (conv_cache, relu_cache, pool_cache)
+  a, sbn_cache = spatial_batchnorm_forward(a, gamma, beta, sbn_param)
+  a, relu_cache = relu_forward(a)
+  out, pool_cache = max_pool_forward_fast(s, pool_param)
+  cache = (conv_cache, sbn_cache, relu_cache, pool_cache)
   return out, cache
