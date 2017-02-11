@@ -13,7 +13,7 @@ This repository contains my solutions to the assignments of the CS231n course. A
 * [x] Features
 
 ### Assignment - 2
-* [x] Fully Connected Nets
+* [x] Fully-connected Nets
 * [x] Batchnormalisation
 * [x] Dropout
 * [x] Convolutional Neural Network ~~(TODO: Improve classification accuracy on CIFAR-10 above 65%)~~
@@ -22,4 +22,4 @@ This repository contains my solutions to the assignments of the CS231n course. A
 * [x] Different ConvNet Architectures (particularly: `[conv - relu - conv - relu - pool]xM - [affine]xN - [softmax]` (TODO: debug the batchnorm implementation of this architecture)
 
 ### Assignment - 3
-* [ ] Image Captioning with vanilla RNNs
+* [ ] Image captioning with vanilla RNNs
