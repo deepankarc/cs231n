@@ -20,3 +20,6 @@ This repository contains my solutions to the assignments of the CS231n course. A
 * [x] Implement parametric ReLU
 * [x] Analyse effect of Adam vs Adam+LR decay
 * [x] Different ConvNet Architectures (particularly: `[conv - relu - conv - relu - pool]xM - [affine]xN - [softmax]` (TODO: debug the batchnorm implementation of this architecture)
+
+### Assignment - 3
+* [ ] Image Captioning with vanilla RNNs
