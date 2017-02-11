@@ -113,18 +113,13 @@ class TwoLayerNet(object):
     # TODO: Compute the backward pass, computing the derivatives of the weights #
     # and biases. Store the results in the grads dictionary. For example,       #
     # grads['W1'] should store the gradient on W1, and be a matrix of same size #
-    #############################################################################
+    #############################################################################   
     # derivative of softmax function
-    da2 = -a2
-    da2[np.arange(N),y] += 1
-    da2 *= (a2[np.arange(N),y])[:,None]
+    da2 = np.matrix.copy(a2)
+    da2[np.arange(N),y] -= 1
     
     # eq.1
-    #Tracer()()
-    #mask = np.zeros(a2.shape)
-    #mask[np.arange(N),y] = 1
-    #delta_L = - ((1/a2) * mask) * da2 / N
-    delta_L = - 1/(a2[np.arange(N),y])[:,None] * da2 / N
+    delta_L = da2 / N
     
     # eq.2, incorporates derivative of ReLU
     delta_l = np.dot(delta_L,W2.T)
@@ -137,19 +132,6 @@ class TwoLayerNet(object):
     # eq. 4    
     grads['W1'] = np.dot(X.T,delta_l) + reg*W1
     grads['W2'] = np.dot(a1.T,delta_L) + reg*W2
-    
-    """dscores = a2
-    dscores[np.arange(N),y] -= 1
-    dscores /= N
-    
-    grads['b2'] = np.sum(dscores,axis=0)
-    grads['W2'] = np.dot(a1.T,dscores) + reg*W2
-    
-    dhidden = np.dot(dscores,W2.T)
-    dhidden[a1<=0] = 0
-    
-    grads['b1'] = np.sum(dhidden,axis=0)
-    grads['W1'] = np.dot(X.T,dhidden) + reg*W1"""
      
     #############################################################################
     #                              END OF YOUR CODE                             #
