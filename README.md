@@ -9,7 +9,7 @@ This repository contains my solutions to the assignments of the CS231n course. A
 * [x] K-Nearest Neighbours
 * [x] Support Vector Machines
 * [x] Softmax
-* [x] Two-Layer Neural Network ~~(TODO: slight changes to calculation on deltas in backprop for softmax layer)~~
+* [x] Two-Layer Neural Network ~~(TODO: slight changes to calculation of deltas in backprop for softmax layer)~~
 * [x] Features
 
 ### Assignment - 2
