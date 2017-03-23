@@ -22,4 +22,5 @@ This repository contains my solutions to the assignments of the CS231n course. A
 * [x] Different ConvNet Architectures (particularly: `[conv - relu - conv - relu - pool]xM - [affine]xN - [softmax]` (TODO: debug the batchnorm implementation of this architecture)
 
 ### Assignment - 3
-* [ ] Image captioning with vanilla RNNs
+* [x] Image captioning with vanilla RNNs
+* [x] Image captioning with LSTMs
