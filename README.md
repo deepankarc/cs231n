@@ -24,3 +24,5 @@ This repository contains my solutions to the assignments of the CS231n course. A
 ### Assignment - 3
 * [x] Image captioning with vanilla RNNs
 * [x] Image captioning with LSTMs
+* [x] Image Gradients
+* [x] Image Generation
